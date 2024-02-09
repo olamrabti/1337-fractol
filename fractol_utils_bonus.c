@@ -1,41 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractol_utils.c                                    :+:      :+:    :+:   */
+/*   fractol_utils_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: olamrabt <olamrabt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/30 18:03:26 by olamrabt          #+#    #+#             */
-/*   Updated: 2024/02/09 16:12:51 by olamrabt         ###   ########.fr       */
+/*   Created: 2024/02/08 10:36:50 by olamrabt          #+#    #+#             */
+/*   Updated: 2024/02/09 16:33:08 by olamrabt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fractol.h"
-
-int	mouse_event_handler(int move, int x, int y, t_mlx *frct)
-{
-	(void)x;
-	(void)y;
-	if (move == 4)
-	{
-		frct->zoom *= 1.1;
-		if (frct->iter > 50)
-			frct->iter -= 1;
-	}
-	else if (move == 5)
-	{
-		frct->zoom *= 0.9;
-		frct->iter += 1;
-	}
-	else
-		return (0);
-	if (frct->set == 1)
-		draw_mandelbrot(frct);
-	else if (frct->set == 2)
-		draw_julia(frct);
-	mlx_put_image_to_window(frct->mlx_ptr, frct->win, frct->img, 0, 0);
-	return (0);
-}
+#include "fractol_bonus.h"
 
 int	initialize_mlx(t_mlx *frct)
 {
@@ -60,10 +35,52 @@ int	initialize_mlx(t_mlx *frct)
 	return (0);
 }
 
+int	mouse_event_handler(int move, int x, int y, t_mlx *frct)
+{
+	(void)x;
+	(void)y;
+	if (move == 4)
+	{
+		frct->zoom *= 1.1;
+		if (frct->iter > 50)
+			frct->iter -= 1;
+	}
+	else if (move == 5)
+	{
+		frct->zoom *= 0.9;
+		frct->iter += 1;
+	}
+	else
+		return (0);
+	if (frct->set == 1 || frct->set == 3)
+		mandelbrot_or_bs(frct);
+	else if (frct->set == 2)
+		draw_julia_bonus(frct);
+	mlx_put_image_to_window(frct->mlx_ptr, frct->win, frct->img, 0, 0);
+	return (0);
+}
+
 int	key_event_handler(int move, t_mlx *frct)
 {
+	if (move == 126)
+		frct->sh_v += frct->zoom;
+	if (move == 125)
+		frct->sh_v -= frct->zoom;
+	if (move == 124)
+		frct->sh_h += frct->zoom;
+	if (move == 123)
+		frct->sh_h -= frct->zoom;
+	if (move == 24)
+		frct->iter += 2;
+	if (move == 27)
+		frct->iter -= 2;
 	if (move == 53)
-		handle_window_close(frct);
+		exit(0);
+	if (frct->set == 1 || frct->set == 3)
+		mandelbrot_or_bs(frct);
+	else if (frct->set == 2)
+		draw_julia_bonus(frct);
+	mlx_put_image_to_window(frct->mlx_ptr, frct->win, frct->img, 0, 0);
 	return (0);
 }
 
