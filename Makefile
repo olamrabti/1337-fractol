@@ -6,7 +6,7 @@
 #    By: olamrabt <olamrabt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 18:03:20 by olamrabt          #+#    #+#              #
-#    Updated: 2024/02/09 16:29:10 by olamrabt         ###   ########.fr        #
+#    Updated: 2024/02/11 11:03:44 by olamrabt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,13 +31,16 @@ all: $(NAME)
 
 bonus: $(NAME_bonus)
 
-$(NAME): $(OBJS) fractol.h
-	cc $(FLAGS) -g $(OBJS) -o $@
+$(NAME): $(OBJS) 
+	cc $(FLAGS)  $(OBJS) -o $@
 
-$(NAME_bonus): $(OBJS_bonus) fractol_bonus.h
-	cc $(FLAGS) -g $(OBJS_bonus) -o $@
+$(NAME_bonus): $(OBJS_bonus)
+	cc $(FLAGS)  $(OBJS_bonus) -o $@
 
-%.o: %.c 
+%.o: %.c fractol.h
+	cc -Wall -Werror  -Wextra -c $<
+
+%bonus.o: %bonus.c fractol_bonus.h
 	cc -Wall -Werror  -Wextra -c $<
 
 clean:
